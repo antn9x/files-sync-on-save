@@ -1,0 +1,123 @@
+{
+  "name": "files-sync-on-save",
+  "displayName": "files-sync-on-save",
+  "description": "sync file when save",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.77.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": [
+      {
+        "title": "FileSyncOnSave",
+        "properties": {
+          "files-sync.onSave": {
+            "title": "Mappings",
+            "description": "An array of objects (maps) that link a Source folder to one or more Destination folders.",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "source": {
+                  "title": "Source Folder",
+                  "description": "Path of source source folder to sync across destinations.",
+                  "type": "string"
+                },
+                "destination": {
+                  "title": "Destination Folders",
+                  "description": "Folders to be synced.",
+                  "oneOf": [
+                    {
+                      "type": "string",
+                      "title": "Destination Folder",
+                      "description": "Path of folder to be synced."
+                    },
+                    {
+                      "type": "array",
+                      "title": "Destinations",
+                      "items": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "title": "Destination Folder",
+                            "description": "Path of folder to be synced."
+                          },
+                          {
+                            "type": "object",
+                            "title": "Destination",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "title": "Destination name."
+                              },
+                              "path": {
+                                "type": "string",
+                                "title": "Folder path."
+                              },
+                              "active": {
+                                "type": "boolean",
+                                "title": "Determines if destination will be synced to."
+                              },
+                              "sourceStartPath": {
+                                "type": "string",
+                                "title": "Source Folder Within Workspace"
+                              },
+                              "ignoreNames": {
+                                "type": "string",
+                                "title": "Ignore FileName Expression"
+                              }
+                            },
+                            "required": [
+                              "name",
+                              "path",
+                              "active"
+                            ],
+                            "additionalProperties": false
+                          }
+                        ]
+                      },
+                      "uniqueItems": true
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "source",
+                "destination"
+              ],
+              "additionalProperties": false
+            },
+            "uniqueItems": true
+          }
+        }
+      }
+    ]
+  },
+  "scripts": {
+    "deploy": "vsce package",
+    "vscode:prepublish": "pnpm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "pnpm run compile && pnpm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.77.0",
+    "@types/glob": "^8.1.0",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "16.x",
+    "@typescript-eslint/eslint-plugin": "^5.56.0",
+    "@typescript-eslint/parser": "^5.56.0",
+    "eslint": "^8.36.0",
+    "glob": "^8.1.0",
+    "mocha": "^10.2.0",
+    "typescript": "^4.9.5",
+    "@vscode/test-electron": "^2.3.0"
+  }
+}
