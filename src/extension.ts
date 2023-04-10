@@ -25,15 +25,20 @@ export function activate(context: vscode.ExtensionContext) {
   // This line of code will only be executed once when your extension is activated
   console.log('Congratulations, your extension "files-sync-on-save" is now active!');
   const folder = vscode.workspace.workspaceFolders?.at(0);
+  console.log(folder);
   if (!folder) {
     vscode.window.showErrorMessage('No opened folder.');
     return;
   }
   let root = folder.uri.fsPath;
+  console.log('root', root);
   const map = mappings();
   let save = vscode.workspace.onDidSaveTextDocument((file) => {
     const filePath = file.uri.fsPath;
-    const needSync = map.find(m => filePath.includes(m.source));
+    const needSync = map.find(m => filePath
+      .replace(/\\/g, '/')
+      .includes(m.source));
+    console.log(needSync);
     if (needSync) {
       syncSave(needSync, file, root);
     }
@@ -46,21 +51,29 @@ export function deactivate() { }
 
 function mappings(): Mapping[] {
   let maps = vscode.workspace.getConfiguration('files-sync').get<Mapping[]>('onSave');
+  // console.log(maps);
   if (!maps) { console.log("No mappings set."); }
   return maps ? maps : new Array<Mapping>();
 }
 
-function syncSave(map: Mapping, file: vscode.TextDocument, root: string) {
+async function syncSave(map: Mapping, file: vscode.TextDocument, root: string) {
   //Determine Destination
   if (typeof map.destination === "string") {
     //Single Destination
     const fileFsPath = path.resolve(root, map.destination);
+    console.log('fileFsPath', fileFsPath);
     if (fs.lstatSync(fileFsPath).isDirectory()) {
       const files = fs.readdirSync(fileFsPath);
-      files.forEach(fileFs => {
+      const sourceFilePath = file.uri.fsPath;
+      const srcFolder = path.dirname(sourceFilePath);
+      for (let index = 0; index < files.length; index++) {
+        const fileFs = files[index];
+        console.log('fileFs', fileFs);
         const fileInFolder = path.join(fileFsPath, fileFs);
-        syncFile(file, vscode.Uri.file(fileInFolder));
-      });
+        const srcFile = vscode.Uri.file(path.join(srcFolder, fileFs));
+        const fileContent = await vscode.workspace.openTextDocument(srcFile);
+        syncFile(fileContent, vscode.Uri.file(fileInFolder));
+      }
     } else {
       syncFile(file, vscode.Uri.file(fileFsPath));
     }
