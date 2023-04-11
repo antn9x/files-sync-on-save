@@ -3,6 +3,8 @@
   "displayName": "files-sync-on-save",
   "description": "sync file when save",
   "version": "0.0.1",
+  "publisher": "antn9x",
+  "repository": "https://github.com/antn9x/files-sync-on-save",
   "engines": {
     "vscode": "^1.77.0"
   },
@@ -102,10 +104,10 @@
   },
   "scripts": {
     "deploy": "vsce package",
-    "vscode:prepublish": "pnpm run compile",
+    "vscode:prepublish": "yarn compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "pretest": "pnpm run compile && pnpm run lint",
+    "pretest": "yarn compile && yarn lint",
     "lint": "eslint src --ext ts",
     "test": "node ./out/test/runTest.js"
   },
