@@ -1,6 +1,16 @@
 # README
 
 Create config settings then sync
+```json
+"files-sync.onSave": [
+  { "source": "build/", "destination": "build-templates/" },
+  { "source": "build/a.txt", "destination": "build-templates/b.txt" },
+  {
+    "source": "C:\\Dev\\build-templates",
+    "destination": "Z:\\Live\\Peach"
+  }
+]
+```
 
 ## Features
 
