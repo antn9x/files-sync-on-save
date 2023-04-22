@@ -61,16 +61,17 @@ async function syncSave(map: Mapping, file: vscode.TextDocument, root: string) {
   if (typeof map.destination === "string") {
     //Single Destination
     const fileFsPath = path.resolve(root, map.destination);
-    console.log('fileFsPath', fileFsPath);
+    // console.log('fileFsPath', fileFsPath, fs.lstatSync(fileFsPath).isDirectory());
+    const sourceFilePath = file.uri.fsPath;
     if (fs.lstatSync(fileFsPath).isDirectory()) {
-      const sourceFilePath = file.uri.fsPath;
       const fileName = path.basename(sourceFilePath);
       const folderOfFile = path.dirname(sourceFilePath);
       if (folderOfFile.endsWith(map.destination)) {
         const fileInFolder = path.join(fileFsPath, fileName);
         syncFile(file, vscode.Uri.file(fileInFolder));
       } else {
-        const fileInFolder = fileFsPath.replace(map.source, map.destination);
+        const fileInFolder = sourceFilePath.replace(map.source, map.destination);
+        // console.log('fileInFolder', fileInFolder);
         syncFile(file, vscode.Uri.file(fileInFolder));
       }
     } else {
