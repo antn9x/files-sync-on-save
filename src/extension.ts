@@ -66,7 +66,8 @@ async function syncSave(map: Mapping, file: vscode.TextDocument, root: string) {
     if (fs.lstatSync(fileFsPath).isDirectory()) {
       const fileName = path.basename(sourceFilePath);
       const folderOfFile = path.dirname(sourceFilePath);
-      if (folderOfFile.endsWith(map.destination)) {
+      // console.log(folderOfFile, map.destination);
+      if (path.basename(folderOfFile) === path.basename(map.destination)) {
         const fileInFolder = path.join(fileFsPath, fileName);
         syncFile(file, vscode.Uri.file(fileInFolder));
       } else {

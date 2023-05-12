@@ -2,7 +2,7 @@
   "name": "files-sync-on-save",
   "displayName": "files-sync-on-save",
   "description": "sync file when save",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "publisher": "antn9x",
   "repository": "https://github.com/antn9x/files-sync-on-save",
   "engines": {
