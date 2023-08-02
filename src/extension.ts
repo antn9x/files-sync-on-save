@@ -13,6 +13,7 @@ interface Destination {
 }
 
 export interface Mapping {
+  ignores: string[];
   source: string;
   destination: string | string[] | Destination[];
 }
@@ -31,14 +32,18 @@ export function activate(context: vscode.ExtensionContext) {
     return;
   }
   let root = folder.uri.fsPath;
-  console.log('root', root);
+  // console.log('root', root);
   const map = mappings();
   let save = vscode.workspace.onDidSaveTextDocument((file) => {
     const filePath = file.uri.fsPath;
     const needSync = map.find(m => filePath
       .replace(/\\/g, '/')
-      .includes(m.source));
-    console.log(needSync);
+      .includes(m.source)
+      && !m.ignores.some(i => filePath
+        .replace(/\\/g, '/')
+        .includes(i))
+    );
+    // console.log(needSync);
     if (needSync) {
       syncSave(needSync, file, root);
     }

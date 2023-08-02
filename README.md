@@ -6,6 +6,7 @@ Create config settings then sync
   { "source": "build/", "destination": "build-templates/" },
   { "source": "build/a.txt", "destination": "build-templates/b.txt" },
   {
+    "ignores": ["a.txt"],
     "source": "C:\\Dev\\build-templates",
     "destination": "Z:\\Live\\Peach"
   }

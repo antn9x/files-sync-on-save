@@ -2,7 +2,7 @@
   "name": "files-sync-on-save",
   "displayName": "files-sync-on-save",
   "description": "sync file when save",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "publisher": "antn9x",
   "repository": "https://github.com/antn9x/files-sync-on-save",
   "engines": {
@@ -27,6 +27,14 @@
             "items": {
               "type": "object",
               "properties": {
+                "ignores": {
+                  "title": "Ignore files",
+                  "description": "File name to ignore.",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
                 "source": {
                   "title": "Source Folder",
                   "description": "Path of source source folder to sync across destinations.",
